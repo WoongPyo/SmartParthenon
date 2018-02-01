@@ -26,7 +26,7 @@ public class ParthenonBuilder : MonoBehaviour {
     {
 
         float floorScale = 1;
-        float floorY = transform.position.y;
+        float floorY = 0;
 
         foreach (Transform t in transform.Cast<Transform>().ToArray())
         {
@@ -39,29 +39,30 @@ public class ParthenonBuilder : MonoBehaviour {
             var tr = floor.transform;
             tr.localScale = new Vector3(floorWidth* floorScale, floorHeight, floorDepth* floorScale);
             upperFloorScale = new Vector3(floorWidth * floorScale, 0, floorDepth * floorScale);            
-            tr.localPosition = new Vector3(transform.position.x, floorY, transform.position.z);
-            upperFloorPosition = new Vector3(transform.position.x, floorY, transform.position.z);
+            tr.localPosition = new Vector3(0, floorY, 0);
+            upperFloorPosition = new Vector3(0, floorY, 0);
             floorScale *= 0.9f;
             floorY += floorHeight;
         }
 
-        float distWidth = (upperFloorScale.x - pillarRadius) / (pillarCountWidth - 1);
-        float distDepth = (upperFloorScale.z - pillarRadius) / (pillarCountDepth - 1);
+        float distWidth = (upperFloorScale.x - pillarRadius*2) / (pillarCountWidth - 1);
+        float distDepth = (upperFloorScale.z - pillarRadius*2) / (pillarCountDepth - 1);
+        float upperFloorHeight = upperFloorPosition.y + floorHeight / 2;
 
         for (int i = 0; i < pillarCountWidth; i++)
         {
             var pillar = Instantiate(cylinderPrefab, transform);
             var tr = pillar.transform;
-            tr.localScale = new Vector3(pillarRadius, pillarHeight/2, pillarRadius);
-            tr.localPosition = new Vector3(upperFloorPosition.x + (-upperFloorScale.x + pillarRadius) / 2 + distWidth * i, upperFloorPosition.y, upperFloorPosition.z + (-upperFloorScale.z + pillarRadius) / 2);
+            tr.localScale = new Vector3(pillarRadius, pillarHeight, pillarRadius);
+            tr.localPosition = new Vector3( - upperFloorScale.x/2 + pillarRadius + distWidth * i, upperFloorHeight, - upperFloorScale.z/2 + pillarRadius);
 
         }
         for (int i = 0; i < pillarCountWidth; i++)
         {
             var pillar = Instantiate(cylinderPrefab, transform);
             var tr = pillar.transform;
-            tr.localScale = new Vector3(pillarRadius, pillarHeight/2, pillarRadius);
-            tr.localPosition = new Vector3(upperFloorPosition.x + (-upperFloorScale.x + pillarRadius) / 2 + distWidth * i, upperFloorPosition.y, upperFloorPosition.z - (-upperFloorScale.z + pillarRadius) / 2);
+            tr.localScale = new Vector3(pillarRadius, pillarHeight, pillarRadius);
+            tr.localPosition = new Vector3( - upperFloorScale.x / 2 + pillarRadius + distWidth * i, upperFloorHeight, upperFloorScale.z / 2 - pillarRadius);
 
         }
 
@@ -69,16 +70,16 @@ public class ParthenonBuilder : MonoBehaviour {
         {
             var pillar = Instantiate(cylinderPrefab, transform);
             var tr = pillar.transform;
-            tr.localScale = new Vector3(pillarRadius, pillarHeight/2, pillarRadius);
-            tr.localPosition = new Vector3(upperFloorPosition.x + (-upperFloorScale.x + pillarRadius) / 2, upperFloorPosition.y, upperFloorPosition.z + (-upperFloorScale.z + pillarRadius) / 2 + distDepth * i);
+            tr.localScale = new Vector3(pillarRadius, pillarHeight, pillarRadius);
+            tr.localPosition = new Vector3( -upperFloorScale.x / 2 + pillarRadius , upperFloorHeight, - upperFloorScale.z/2 + pillarRadius + distDepth * i);
 
         }
         for (int i = 1; i < pillarCountDepth - 1; i++)
         {
             var pillar = Instantiate(cylinderPrefab, transform);
             var tr = pillar.transform;
-            tr.localScale = new Vector3(pillarRadius, pillarHeight/2, pillarRadius);
-            tr.localPosition = new Vector3(upperFloorPosition.x - (-upperFloorScale.x + pillarRadius) / 2, upperFloorPosition.y, upperFloorPosition.z + (-upperFloorScale.z + pillarRadius) / 2 + distDepth * i);
+            tr.localScale = new Vector3(pillarRadius, pillarHeight, pillarRadius);
+            tr.localPosition = new Vector3( upperFloorScale.x/2 - pillarRadius, upperFloorHeight, - upperFloorScale.z/2 + pillarRadius + distDepth * i);
 
         }
 
@@ -86,7 +87,7 @@ public class ParthenonBuilder : MonoBehaviour {
         var roof = Instantiate(cubePrefab, transform);
         var tr_roof = roof.transform;
         tr_roof.localScale = new Vector3 (upperFloorScale.x, roofHeight, upperFloorScale.z);
-        tr_roof.localPosition = new Vector3(transform.position.x, upperFloorPosition.y + pillarHeight, transform.position.z);
+        tr_roof.localPosition = new Vector3(0, upperFloorHeight + pillarHeight + roofHeight / 2  ,0);
 
 
 
